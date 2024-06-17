@@ -6,10 +6,13 @@
  *
  */
 
-import {useData} from './data';
+import { useData } from './data';
 
 export default function Comments() {
   const comments = useData();
+
+  console.log('comments', comments);
+
   return (
     <>
       {comments.map((comment, i) => (

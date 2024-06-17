@@ -1,14 +1,9 @@
-# SSR Fixtures
-
-A set of test cases for quickly identifying issues with server-side rendering.
+# Streaming react-18 fixture
 
 ## Setup
 
-To reference a local build of React, first run `npm run build` at the root
-of the React project. Then:
-
 ```
-cd fixtures/ssr2
+cd fixtures/streaming-react-18
 yarn
 yarn start
 ```

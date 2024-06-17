@@ -6,9 +6,7 @@
  *
  */
 
-import {hydrateRoot} from 'react-dom/client';
-import App from './App';
-
-console.log(11111);
-
-hydrateRoot(document, <App assets={window.assetManifest} />);
+// import {hydrateRoot} from 'react-dom/client';
+// import App from './App';
+//
+// hydrateRoot(document, <App assets={window.assetManifest} />);

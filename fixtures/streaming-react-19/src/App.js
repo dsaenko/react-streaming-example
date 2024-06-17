@@ -6,15 +6,12 @@
  *
  */
 
-import {Suspense, lazy, useMemo} from 'react';
-import { Suspense as SuspensiveSuspense, Suspensive, SuspensiveProvider } from '@suspensive/react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import {ErrorBoundary} from 'react-error-boundary';
+import { Suspense, lazy } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import Html from './Html';
 import Spinner from './Spinner';
 import Layout from './Layout';
 import NavBar from './NavBar';
-import { Text } from './query/Text';
 
 const Comments = lazy(() => import('./Comments' /* webpackPrefetch: true */));
 const Sidebar = lazy(() => import('./Sidebar' /* webpackPrefetch: true */));
@@ -25,47 +22,18 @@ function sleep(ms) {
 }
 
 export default function App({assets}) {
-  const suspensive = new Suspensive({
-    defaultProps: {
-      suspense: {
-        fallback: <Spinner />,
-        clientOnly: false,
-      },
-    },
-  });
-
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        staleTime: 5 * 1000,
-      },
-    },
-  });
-
   return (
     <Html assets={assets} title="Hello">
-      <SuspensiveProvider value={suspensive}>
-        <QueryClientProvider client={queryClient}>
-          <Suspense fallback={<Spinner />}>
-            <ErrorBoundary FallbackComponent={Error}>
-              <Content />
-            </ErrorBoundary>
-          </Suspense>
-        </QueryClientProvider>
-      </SuspensiveProvider>
+      <Suspense fallback={<Spinner />}>
+        <ErrorBoundary FallbackComponent={Error}>
+          <Content />
+        </ErrorBoundary>
+      </Suspense>
     </Html>
   );
 }
 
 function Content() {
-  // const testPromise = useMemo(() => {
-  //   return sleep(5000).then(() => {
-  //     return ['test 1', 'test 2', 'test 3'];
-  //   });
-  // }, []);
-
-  console.log('render Content');
-
   return (
     <Layout>
       <NavBar />
@@ -78,15 +46,12 @@ function Content() {
         <Suspense fallback={<Spinner />}>
           <Post />
         </Suspense>
-        <SuspensiveSuspense fallback={<Spinner />}>
-          <Text ms={1500} />
-        </SuspensiveSuspense>
-        {/*<section className="comments">
+        <section className="comments">
           <h2>Comments</h2>
           <Suspense fallback={<Spinner />}>
             <Comments />
           </Suspense>
-        </section>*/}
+        </section>
         <h2>Thanks for reading!</h2>
       </article>
     </Layout>

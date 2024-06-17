@@ -22,6 +22,9 @@ const path = require('path');
 const render = require('./render');
 const {JS_BUNDLE_DELAY} = require('./delays');
 
+// TODO: fix MaxListenersExceededWarning
+require('events').EventEmitter.defaultMaxListeners = 100;
+
 const PORT = process.env.PORT || 4000;
 const app = express();
 

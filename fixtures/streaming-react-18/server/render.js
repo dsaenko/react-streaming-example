@@ -7,11 +7,10 @@
  */
 
 import * as React from 'react';
-// import {renderToString} from 'react-dom/server';
-import {renderToPipeableStream } from 'react-dom/server';
+import { renderToPipeableStream } from 'react-dom/server';
 import App from '../src/App';
-import {DataProvider} from '../src/data';
-import {API_DELAY, ABORT_DELAY} from './delays';
+import { DataProvider } from '../src/data';
+import { API_DELAY, ABORT_DELAY } from './delays';
 
 // In a real setup, you'd read it from webpack build stats.
 let assets = {
@@ -19,22 +18,8 @@ let assets = {
   'main.css': '/main.css',
 };
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 module.exports = function render(url, res) {
   const data = createServerData();
-  // This is how you would wire it up previously:
-  //
-  // res.send(
-  //   '<!DOCTYPE html>' +
-  //   renderToString(
-  //     <DataProvider data={data}>
-  //       <App assets={assets} />
-  //     </DataProvider>,
-  //   )
-  // );
 
   // The new wiring is a bit more involved.
   res.socket.on('error', error => {
@@ -42,9 +27,6 @@ module.exports = function render(url, res) {
   });
   let didError = false;
 
-  // const testPromise = sleep(5000).then(() => {
-  //   return ['test 1', 'test 2', 'test 3'];
-  // });
   const {pipe, abort} = renderToPipeableStream(
     <DataProvider data={data}>
       <App assets={assets} />
@@ -61,7 +43,7 @@ module.exports = function render(url, res) {
         res.setHeader('Content-type', 'text/html');
         pipe(res);
       },
-      onShellError(x) {
+      onShellError() {
         // Something errored before we could complete the shell so we emit an alternative shell.
         res.statusCode = 500;
         res.send('<!doctype><p>Error</p>');
@@ -86,7 +68,7 @@ function createServerData() {
   return {
     read() {
       if (done) {
-        return;
+        return ['test 1', 'test 2', 'test 3'];
       }
       if (promise) {
         throw promise;
